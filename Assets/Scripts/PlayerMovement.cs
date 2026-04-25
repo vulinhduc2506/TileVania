@@ -59,13 +59,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isAlive) return;
 
-        // Chỉ xử lý khi bấm nút và không bị vướng các trạng thái cấm (như trèo thang)
         if (inputValue.isPressed && !isShootingState && !isClimbingState)
         {
             // --- LOGIC NGẮT CHIÊU (ANIMATION CANCELING) ---
             if (isSwingingState)
             {
-                isSwingingState = false; // Tắt trạng thái lướt
+                isSwingingState = false;
                 myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y); // Phanh gấp lại để bắn
             }
 
@@ -73,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
             isShootingState = true;
             myAnimator.SetBool("isRunning", false); 
             myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y);
-            myAnimator.SetTrigger("Shooting"); // Nhớ nối Any State -> Shooting trong Animator
+            myAnimator.SetTrigger("Shooting"); 
 
             
         }
@@ -101,18 +100,13 @@ public class PlayerMovement : MonoBehaviour
 
     void CheckMidAirSwing()
     {
-        // Nếu không ở trong trạng thái Swing thì không cần kiểm tra, bỏ qua luôn
         if (!isSwingingState) { return; }
 
-        // Liên tục đo xem chân còn chạm đất không
         bool isGrounded = myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
 
-        // Vừa lướt ra khỏi mép vực -> Ngắt lướt ngay lập tức
         if (!isGrounded)
         {
             EndSwing();
-            
-            // Xóa lực đẩy lướt thừa đi, nhường quyền lại cho hệ thống rơi tự do
             myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y); 
         }
     }
@@ -148,7 +142,6 @@ public class PlayerMovement : MonoBehaviour
         if (isShootingState) return;
         if (isSwingingState)
         {
-            // Ép vận tốc lướt MỖI KHUNG HÌNH để chống lại ma sát và hàm chạy
             myRigidbody.velocity = new Vector2(moveInput.x * swingSpeed, 0f);
 
             return;
@@ -185,7 +178,6 @@ public class PlayerMovement : MonoBehaviour
         bool hasHorizontalInput = Mathf.Abs(moveInput.x) > Mathf.Epsilon;
         bool isGrounded = myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
 
-        // 2. LỐI THOÁT KHI CHẠM ĐẤT:
         // Đang leo thang, chân đã chạm đất, và người chơi muốn rẽ ngang (không bấm lên/xuống)
         if (isClimbingState && isGrounded && hasHorizontalInput && !hasVerticalInput)
         {
@@ -230,7 +222,7 @@ public class PlayerMovement : MonoBehaviour
         isClimbingState = false;
         myRigidbody.gravityScale = gravityScaleAtStart;
         myAnimator.SetBool("isClimbing", false);
-        myAnimator.speed = 1f; // Trả lại tốc độ mặc định để không bị đóng băng
+        myAnimator.speed = 1f;
     }
 
     void Die()
