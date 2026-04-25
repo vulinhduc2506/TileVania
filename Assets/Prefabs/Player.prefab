@@ -78,7 +78,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1413660093
-  m_SortingLayer: 8
+  m_SortingLayer: 9
   m_SortingOrder: 0
   m_Sprite: {fileID: 582123770, guid: 447e6fbee409a48428e8987261d2bc06, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -194,7 +194,8 @@ MonoBehaviour:
   moveSpeed: 5
   jumpSpeed: 17
   climbSpeed: 5
-  deathKick: {x: 10, y: 10}
+  swingSpeed: 10
+  deathKick: {x: 2, y: 5}
   arrow: {fileID: 7798034148504951261, guid: 612a4c9a22d77bf4998f32e3a8fb9600, type: 3}
   bow: {fileID: 1809565398989227400}
 --- !u!61 &887073916298786398

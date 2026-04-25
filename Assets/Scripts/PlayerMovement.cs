@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
             myRigidbody.velocity = new Vector2(0f, myRigidbody.velocity.y);
             myAnimator.SetTrigger("Shooting"); // Nhớ nối Any State -> Shooting trong Animator
 
-            // LƯU Ý: Không Instantiate mũi tên ở đây nữa!
+            
         }
     }
 
@@ -84,10 +84,8 @@ public class PlayerMovement : MonoBehaviour
         if (!isAlive) return;
         if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))) { return; }
 
-        // KIỂM TRA ĐIỀU KIỆN CHẠY: Người chơi có đang bấm phím Trái/Phải không?
         bool isTryingToRun = Mathf.Abs(moveInput.x) > Mathf.Epsilon;
 
-        // Chỉ chém khi: Có bấm nút + ĐANG CÓ Ý ĐỊNH CHẠY + Không bị vướng các trạng thái khác
         if (inputValue.isPressed && isTryingToRun && !isSwingingState && !isShootingState && !isClimbingState)
         {
             isSwingingState = true;
@@ -119,19 +117,18 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void EndSwing() // gọi từ Animation Event cuối clip Swing
+    public void EndSwing()
     {
         isSwingingState = false;
     }
 
-    public void EndShooting() // gọi từ Animation Event cuối clip Swing
+    public void EndShooting()
     {
         isShootingState = false;
     }
 
     public void SpawnArrowEvent() 
     {
-        // Chỉnh lại vị trí bow.position sao cho khớp với tay ở khung hình này
         Instantiate(arrow, bow.position, transform.rotation);
     }
 
@@ -154,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
             // Ép vận tốc lướt MỖI KHUNG HÌNH để chống lại ma sát và hàm chạy
             myRigidbody.velocity = new Vector2(moveInput.x * swingSpeed, 0f);
 
-            return; // Dừng hàm tại đây, KHÔNG cho code chạy bình thường ở dưới kích hoạt
+            return;
         }
 
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, myRigidbody.velocity.y);
@@ -178,7 +175,6 @@ public class PlayerMovement : MonoBehaviour
 
     void ClimbLadder()
     {
-        // 1. NẾU KHÔNG CHẠM THANG: Chắc chắn phải thoát trạng thái leo
         if (!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
         {
             ExitClimbState();
@@ -194,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
         if (isClimbingState && isGrounded && hasHorizontalInput && !hasVerticalInput)
         {
             ExitClimbState();
-            return; // Thoát hàm để nhường quyền điều khiển lại cho hàm Run()
+            return;
         }
 
         // 3. VÀO TRẠNG THÁI LEO:
@@ -203,7 +199,6 @@ public class PlayerMovement : MonoBehaviour
             isClimbingState = true;
         }
 
-        // Nếu chưa vào trạng thái leo -> Đi ngang qua bình thường
         if (!isClimbingState) { return; }
 
         // 4. KHI ĐANG LEO THANG (isClimbingState == true)
@@ -230,7 +225,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Hàm phụ trợ để tái sử dụng code, giúp class gọn gàng hơn
     void ExitClimbState()
     {
         isClimbingState = false;
@@ -246,8 +240,15 @@ public class PlayerMovement : MonoBehaviour
             isAlive = false;
             myAnimator.SetTrigger("Die");
             myRigidbody.velocity = deathKick;
-            FindObjectOfType<GameSession>().ProccessPlayerDeath();
+            StartCoroutine(WaitAndProcessDeath());
         }
+    }
+
+    IEnumerator WaitAndProcessDeath()
+    {
+        yield return new WaitForSeconds(0.5f);
+        
+        FindObjectOfType<GameSession>().ProccessPlayerDeath();
     }
 
 

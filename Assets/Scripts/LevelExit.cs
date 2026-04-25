@@ -10,10 +10,8 @@ public class LevelExit : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            // Khóa chạy nhảy
             collision.GetComponent<PlayerMovement>().enabled = false; 
             
-            // "Gọi điện" báo cáo cho Sếp GameSession
             FindObjectOfType<GameSession>().ProcessLevelComplete();
         }
     }

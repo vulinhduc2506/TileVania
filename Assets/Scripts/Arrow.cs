@@ -5,14 +5,14 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
     [SerializeField] float arrowSpeed = 20f;
-    [SerializeField] float penetrateDepth = 0.1f; // Độ lún sâu vào tường (bạn tự chỉnh cho vừa mắt)
+    [SerializeField] float penetrateDepth = 0.1f; // Độ lún sâu vào tường
 
     Rigidbody2D myRigidbody;
     BoxCollider2D myCollider;
     PlayerMovement player;
     float xSpeed;
 
-    bool isStuck = false; // Biến trạng thái cực kỳ quan trọng
+    bool isStuck = false; 
 
     void Start()
     {

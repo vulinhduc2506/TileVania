@@ -90,7 +90,6 @@ public class GameSession : MonoBehaviour
         Time.timeScale = 1f; // Mở khóa thời gian
         ResetGameSession();
         
-        // Ẩn bảng Game Over đi để chơi tiếp
         gameOverPanel.SetActive(false); 
     }
 
@@ -102,7 +101,6 @@ public class GameSession : MonoBehaviour
         Destroy(gameObject); // Về menu thì tự hủy cỗ máy GameSession đi
     }
 
-    // CHUYỂN HÀM NÀY TỪ LEVEL EXIT SANG ĐÂY
     public void ProcessLevelComplete()
     {
         if (levelCompletePanel != null)
@@ -127,7 +125,6 @@ public class GameSession : MonoBehaviour
         Time.timeScale = 0f; 
     }
 
-    // NÚT NEXT LEVEL SẼ GỌI HÀM NÀY NẰM NGAY TẠI GAMESESSION
     public void LoadNextLevelByButton()
     {
         Time.timeScale = 1f; 
@@ -137,11 +134,10 @@ public class GameSession : MonoBehaviour
 
         if (nextSceneIndex == SceneManager.sceneCountInBuildSettings)
         {
-            ResetGameSession(); // Về màn 0 và tự hủy
+            ResetGameSession();
         }
         else
         {
-            // VÌ HÀM NÀY NẰM CÙNG NHÀ VỚI PANEL NÊN LỆNH TẮT CHẮC CHẮN ĂN 100%
             if(levelCompletePanel != null) { levelCompletePanel.SetActive(false); }
             
             FindObjectOfType<ScenePersist>().ResetSencePersist();
